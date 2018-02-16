@@ -24,11 +24,11 @@ class TableController
         }
     }
 
-    public function getTerritoryName($id = null, $reg_id = null) // This function is needed to get the Name of Territory By Id (ter_id or reg_id)
+    public function getTerritoryName($id) // This function is needed to get the Name of Territory By Id (ter_id or reg_id)
         // though I could probably use foreign key or inner join... But it would make me more and more problems for the sake of different table's
         //     charsets (utf8_unicode_ci or utf8_generic_ci) and other stuff
     {
         $table = new Table();
-        return $table->getTerritoryNameById($id, $reg_id);
+        return $table->getTerritoryNameById($id);
     }
 }

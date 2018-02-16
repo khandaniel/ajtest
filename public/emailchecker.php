@@ -9,7 +9,7 @@
 require_once "../app/Controllers/TableController.php";
 require_once "../app/Controllers/UserController.php";
 
-if (isset($_GET['email']) && $users = UserController::emailCheck($_GET['email'])) { // Display alert with notification that user already exists
+if (isset($_GET['email']) && $users = UserController::emailCheck($_GET['email'])) : // Display alert with notification that user already exists
     ?>
     <div class="alert alert-danger">User with such email already exists!</div>
     <table class="table table-striped">
@@ -17,9 +17,7 @@ if (isset($_GET['email']) && $users = UserController::emailCheck($_GET['email'])
         <tr>
             <td>Name</td>
             <td>Email</td>
-            <td>Region</td>
-            <td>City</td>
-            <td>Area</td>
+            <td>Address</td>
         </tr>
         </thead>
         <tbody>
@@ -31,11 +29,9 @@ if (isset($_GET['email']) && $users = UserController::emailCheck($_GET['email'])
             <tr>
                 <td><?= $user['name'] ?></td>
                 <td><?= $user['email'] ?></td>
-                <td><?= TableController::getTerritoryName(null, $user['region']) ?></td>
-                <td><?= TableController::getTerritoryName($user['city']) ?></td>
-                <td><?= TableController::getTerritoryName($user['area']) ?></td>
+                <td><?= TableController::getTerritoryName($user['territory']) ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
-<?php } ?>
+<?php endif; ?>

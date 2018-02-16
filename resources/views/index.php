@@ -1,9 +1,9 @@
 <?php
-if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['theregion']) && isset($_POST['city']) && isset($_POST['area'])) {
+if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['theregion']) && isset($_POST['city']) && isset($_POST['area'])) :
 //    $success = (UserController::addUser($_POST)) ? true : false; // Creating marker to return alert-success
     UserController::addUser($_POST);
     header('Location: /?success');
-}
+endif;
 $success = (isset($_GET['success'])) ? true : false;
 ?>
 <!DOCTYPE html>
@@ -15,36 +15,31 @@ $success = (isset($_GET['success'])) ? true : false;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Тестовое задание на должность PHP junior Developer, Кхан Даниил</title>
-    <style>
-        .form {
-            min-height: 100vh;
-            padding-top: 50vh;
-        }
-    </style>
+    <style>.form {min-height: 100vh;padding-top: 50vh;}</style>
 </head>
 <body>
 <div class="container text-center form">
     <form method="post" id="form" onsubmit="return checkForm();" action="/">
-        <input type="text" name="name" id="name" required value="<?php if (isset($_POST['name'])) {
+        <input type="text" name="name" id="name" required value="<?php if (isset($_POST['name'])) :
             echo $_POST['name'];
-        } ?>" placeholder="ФИО"/>
+        endif; ?>" placeholder="ФИО"/>
         <input type="email" onchange="checkEmail(this.value)" onkeyup="checkEmail(this.value)" name="email" id="email"
                required
-               value="<?php if (isset($_POST['email'])) {
+               value="<?php if (isset($_POST['email'])) :
                    echo $_POST['email'];
-               } ?>" placeholder="EMAIL"/>
+               endif; ?>" placeholder="EMAIL"/>
         <select data-placeholder="Выберите область..." id="region" class="chosen-select" name="theregion" required
                 onchange="proceedToCity(this.value)">
             <option value=""></option>
             <?php
-            if (empty($regions)) {
+            if (empty($regions)) :
                 $regions = TableController::getPlaces('region');
-            }
+            endif;
             foreach ($regions as $region):
                 ?>
-                <option value="<?= $region['reg_id'] ?>" <?php if (isset($_POST['theregion']) && $_POST['theregion'] == $region['reg_id']) {
+                <option value="<?= $region['reg_id'] ?>" <?php if (isset($_POST['theregion']) && $_POST['theregion'] == $region['reg_id']) :
                     echo 'selected'; // Only needed when XMLHTTPRequest doesn't work so that after page being reloaded selected item would be still selected
-                } ?>><?= $region['ter_name'] ?></option>
+                endif; ?>><?= $region['ter_name'] ?></option>
             <?php
             endforeach;
             ?>
@@ -56,15 +51,15 @@ $success = (isset($_GET['success'])) ? true : false;
         <input type="submit" value="Отправить">
     </form>
     <div class="container" style="padding-top: 20px;">
-        <div id="warningName"></div>
-        <div id="warningEmail"></div>
-        <div id="warningAddress"></div>
+        <div id="warningName" class="hidden"><div class='alert alert-warning'>Что-то пошло не так! Проверьте поле с именем.</div></div>
+        <div id="warningEmail" class="hidden"><div class='alert alert-warning'>Что-то пошло не так! Проверьте поле с почтой.</div></div>
+        <div id="warningAddress" class="hidden"><div class='alert alert-warning'>Что-то пошло не так! Заполните все поля с адресом.</div></div>
         <div id="response"></div>
-        <?php if ($success) { ?>
+        <?php if ($success) : ?>
             <div class="alert alert-success">
                 Ваши данные успешно отправлены!
             </div>
-        <?php } ?>
+        <?php endif; ?>
 
     </div>
 </div>
@@ -92,23 +87,23 @@ $success = (isset($_GET['success'])) ? true : false;
 
         // start check up
         if (!nameCheck.test(nameValue)) {
-            warningNameField.innerHTML = "<div class='alert alert-warning'>Что-то пошло не так! Проверьте поле с именем.</div>";
+            warningNameField.className = "";
             hasErrors = 1;
         } else {
-            warningNameField.innerHTML = "";
+            warningNameField.className = "hidden";
         }
         if (!emailCheck.test(emailValue)) {
-            warningEmailField.innerHTML = "<div class='alert alert-warning'>Что-то пошло не так! Проверьте поле с почтой.</div>";
+            warningEmailField.className = "";
             hasErrors = 1;
         } else {
-            warningEmailField.innerHTML = "";
+            warningEmailField.className = "hidden";
         }
         if ( region.innerHTML.search("selected") == -1 || city.innerHTML.search("selected") == -1 || area.innerHTML.search("selected") == -1) {
             // ^ Can't find a way to check if element is selected. This one works. Though it is ugly.
-            warningAddressField.innerHTML = "<div class='alert alert-warning'>Что-то пошло не так! Заполните все поля с адресом.</div>";
+            warningAddressField.className = "";
             hasErrors = 1;
         } else {
-            warningAddressField.value = "";
+            warningAddressField.className = "hidden";
         }
         if ( hasErrors !== 1) {
             return true;

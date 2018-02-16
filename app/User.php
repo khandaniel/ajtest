@@ -15,21 +15,22 @@ class User extends Model
 
     public function exists($email) // Returns boolean if user exists or not
     {
-        $user = $this->query("SELECT email FROM users WHERE email = '{$email}'"); // Query only checks email column.
-        if ($user->fetch_assoc()) {
+        if ($this->fetchTable("SELECT email FROM users WHERE email = '{$email}'")) { // Query only checks email column.
             return true;
         } else {
             return false;
         }
     }
 
+    public function check(array $data) {
+
+    }
+
     public function save($data)
     {
-        $query = "INSERT INTO `users` (name, email, region, city, area) VALUES ('" .
+        $query = "INSERT INTO `users` (name, email, territory) VALUES ('" .
             htmlspecialchars($data['name']) . "', '" .
             filter_var($data['email'], FILTER_VALIDATE_EMAIL) . "', '" . // returns empty string if not valid email.
-            htmlspecialchars($data['theregion']) . "', '" .
-            htmlspecialchars($data['city']) . "', '" .
             htmlspecialchars($data['area']) . "')";
         return $this->query($query);
     }
